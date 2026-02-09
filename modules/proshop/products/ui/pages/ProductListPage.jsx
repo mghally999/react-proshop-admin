@@ -2,14 +2,13 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useDebounce } from "/shared/hooks/useDebounce.js";
-import { useProductsListQuery } from "/modules/proshop/products/api/products.queries.js";
+import { useDebounce } from "@shared/hooks/useDebounce.js";
+import { useProductsListQuery } from "@proshop/products/api/products.queries.js";
 
-import ProductFilters from "/modules/proshop/products/ui/components/ProductFilters.jsx";
-import ProductTable from "/modules/proshop/products/ui/components/ProductTable.jsx";
+import ProductFilters from "@proshop/products/ui/components/ProductFilters.jsx";
+import ProductTable from "@proshop/products/ui/components/ProductTable.jsx";
 
 import styles from "../styles/products.module.css";
-import { routesConfig } from "../../../../../app/router/routes.config";
 
 export default function ProductListPage() {
   const navigate = useNavigate();
@@ -27,12 +26,13 @@ export default function ProductListPage() {
     [page, pageSize, debouncedSearch, status, sort]
   );
 
-  const { data, isLoading, isError, error } = useProductsListQuery(queryParams);
+  const { data, isLoading, isError, error } =
+    useProductsListQuery(queryParams);
 
   const items = data?.items ?? [];
   const meta = data?.meta ?? { page: 1, pageSize, total: 0, pages: 1 };
 
-  function onCreate(e) {
+  function onCreate() {
     navigate("/proshop/products/new");
   }
 
@@ -41,9 +41,6 @@ export default function ProductListPage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Products</h1>
-          <p className={styles.subtitle}>
-            Enterprise product management: fast, responsive, scalable.
-          </p>
         </div>
 
         <button

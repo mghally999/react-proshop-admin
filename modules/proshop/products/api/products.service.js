@@ -1,17 +1,19 @@
-// src/modules/proshop/products/api/products.service.js
-import productsRepo from "/shared/api/repositories/products.repo.js";
+import productsMock from "@shared/api/mock/handlers/products.mock.js";
 
 export const productsService = {
   list(params) {
-    return productsRepo.list(params);
+    return productsMock.list(params);
   },
   getById(id) {
-    return productsRepo.getById(id);
+    return productsMock.getById(id);
   },
   create(payload) {
-    return productsRepo.create(payload);
+    return productsMock.create(payload);
   },
   update(id, payload) {
-    return productsRepo.update(id, payload);
+    return productsMock.update(id, payload);
+  },
+  remove(id) {
+    return productsMock.remove(id);
   },
 };

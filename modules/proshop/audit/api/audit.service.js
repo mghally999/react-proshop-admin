@@ -1,13 +1,7 @@
-import { auditRepo } from "../../../../shared/api/repositories/audit.repo";
-import { normalizeAuditLog } from "../domain/audit.logic";
+import auditMock from "@shared/api/mock/handlers/audit.mock.js";
 
 export const auditService = {
-  async list(params = {}) {
-    const res = await auditRepo.list(params);
-
-    return {
-      ...res,
-      items: res.items.map(normalizeAuditLog),
-    };
+  list() {
+    return auditMock.list();
   },
 };

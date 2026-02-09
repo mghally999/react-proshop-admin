@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { auditService } from "./audit.service";
-import { queryKeys } from "../../../../shared/api/query/queryKeys";
+import { auditService } from "./audit.service.js";
 
-export function useAuditLogs(params = {}) {
+export function useAuditLogs() {
   return useQuery({
-    queryKey: [queryKeys.audit, params],
-    queryFn: () => auditService.list(params),
+    queryKey: ["audit"],
+    queryFn: () => auditService.list(),
   });
 }

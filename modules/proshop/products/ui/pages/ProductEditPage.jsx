@@ -1,16 +1,16 @@
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { routesConfig } from "/app/router/routes.config.jsx";
-import { useProductQuery } from "/modules/proshop/products/api/products.queries.js";
-import { useUpdateProductMutation } from "/modules/proshop/products/api/products.mutations.js";
+import { useProductQuery } from "@proshop/products/api/products.queries.js";
+import { useUpdateProductMutation } from "@proshop/products/api/products.mutations.js";
 import {
   toFormDefaults,
   toProductPayload,
-} from "/modules/proshop/products/domain/product.logic.js";
-import { toastError, toastSuccess } from "/shared/ui/feedback/Toast.jsx";
+} from "@proshop/products/domain/product.logic.js";
 
-import ProductForm from "/modules/proshop/products/ui/components/ProductForm.jsx";
+import { toastError, toastSuccess } from "@shared/ui/feedback/Toast.jsx";
+
+import ProductForm from "@proshop/products/ui/components/ProductForm.jsx";
 import styles from "../styles/products.module.css";
 
 export default function ProductEditPage() {
@@ -27,7 +27,7 @@ export default function ProductEditPage() {
       const payload = toProductPayload(values);
       await updateMut.mutateAsync({ id, payload });
       toastSuccess("Product updated");
-      navigate(`/proshop/products/${id}`); // FIXED
+      navigate(`/proshop/products/${id}`);
     } catch (e) {
       toastError(e?.message ?? "Failed to update product");
     }
@@ -46,7 +46,9 @@ export default function ProductEditPage() {
       <div className={styles.page}>
         <div className={styles.errorBox}>
           <div className={styles.errorTitle}>Product not found</div>
-          <div className={styles.errorText}>{String(error?.message ?? "")}</div>
+          <div className={styles.errorText}>
+            {String(error?.message ?? "")}
+          </div>
         </div>
       </div>
     );
@@ -66,7 +68,7 @@ export default function ProductEditPage() {
           <button
             className={styles.secondaryButton}
             type="button"
-            onClick={() => navigate(`/proshop/products/${id}`)} // FIXED
+            onClick={() => navigate(`/proshop/products/${id}`)}
           >
             Cancel
           </button>

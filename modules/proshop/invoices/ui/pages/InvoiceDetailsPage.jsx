@@ -1,12 +1,15 @@
+// modules/proshop/invoices/ui/pages/InvoiceDetailsPage.jsx
 import { useParams } from "react-router-dom";
-import PageHeader from "../../../../../app/layout/PageHeader";
-import Skeleton from "../../../../../shared/ui/composites/Skeleton";
-import EmptyState from "../../../../../shared/ui/composites/EmptyState.jsx";
-import Badge from "../../../../../shared/ui/primitives/Badge.jsx";
 
-import { useInvoice } from "../../../../proshop/invoices/api/invoices.queries.js";
-import { formatMoney } from "../../../../../shared/lib/money.js";
-import { formatDate } from "../../../../../shared/lib/dates.js";
+import PageHeader from "@/app/layout/PageHeader.jsx";
+
+import Skeleton from "@shared/ui/composites/Skeleton.jsx";
+import EmptyState from "@shared/ui/composites/EmptyState.jsx";
+import Badge from "@shared/ui/primitives/Badge.jsx";
+
+import { useInvoice } from "@proshop/invoices/api/invoices.queries.js";
+import { formatMoney } from "@shared/lib/money.js";
+import { formatDate } from "@shared/lib/dates.js";
 
 import styles from "../styles/invoices.module.css";
 
@@ -14,9 +17,7 @@ export default function InvoiceDetailsPage() {
   const { id } = useParams();
   const { data: invoice, isLoading } = useInvoice(id);
 
-  if (isLoading) {
-    return <Skeleton rows={4} />;
-  }
+  if (isLoading) return <Skeleton rows={4} />;
 
   if (!invoice) {
     return (

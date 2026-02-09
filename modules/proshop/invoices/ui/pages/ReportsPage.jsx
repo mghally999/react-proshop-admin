@@ -1,4 +1,4 @@
-import PageHeader from "../../../../../app/layout/PageHeader";
+import PageHeader from "../../../../../src/app/layout/PageHeader";
 import DataTable from "../../../../../shared/ui/data/DataTable/DataTable";
 import Skeleton from "../../../../../shared//ui/composites/Skeleton";
 import EmptyState from "../../../../../shared/ui/composites/EmptyState";

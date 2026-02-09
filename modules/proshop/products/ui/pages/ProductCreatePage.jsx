@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 
-import { routesConfig } from "/app/router/routes.config.jsx";
-import { useCreateProductMutation } from "/modules/proshop/products/api/products.mutations.js";
+import { routesConfig } from "@/app/router/routes.config.jsx";
+import { useCreateProductMutation } from "@proshop/products/api/products.mutations.js";
 import {
   toProductPayload,
   toFormDefaults,
-} from "/modules/proshop/products/domain/product.logic.js";
-import { toastError, toastSuccess } from "/shared/ui/feedback/Toast.jsx";
+} from "@proshop/products/domain/product.logic.js";
+import { toastError, toastSuccess } from "@shared/ui/feedback/Toast.jsx";
 
-import ProductForm from "/modules/proshop/products/ui/components/ProductForm.jsx";
+import ProductForm from "@proshop/products/ui/components/ProductForm.jsx";
 import styles from "../styles/products.module.css";
 
 export default function ProductCreatePage() {
@@ -20,7 +20,7 @@ export default function ProductCreatePage() {
       const payload = toProductPayload(values);
       const created = await createMut.mutateAsync(payload);
       toastSuccess("Product created");
-      navigate(`/proshop/products/${created.id}`); // FIXED
+      navigate(`/proshop/products/${created.id}`);
     } catch (e) {
       toastError(e?.message ?? "Failed to create product");
     }
@@ -35,10 +35,11 @@ export default function ProductCreatePage() {
             Add a new product (mock now, API later).
           </p>
         </div>
+
         <button
           className={styles.secondaryButton}
           type="button"
-          onClick={() => navigate("/proshop/products")} // FIXED
+          onClick={() => navigate("/proshop/products")}
         >
           Back
         </button>

@@ -1,19 +1,38 @@
-// src/modules/proshop/products/domain/product.status.js
-export const PRODUCT_STATUS = Object.freeze({
-  DRAFT: "draft",
-  ACTIVE: "active",
-  ARCHIVED: "archived",
-});
+import { db, persist } from "../db/store.js";
+import { nowISO } from "@shared/lib/dates.js";
+import { uid } from "../db/seed.js";
 
-export const STOCK_STATUS = Object.freeze({
-  OUT: "out",
-  LOW: "low",
-  OK: "ok",
-});
+export function addAudit(entry) {
+  const state = db();
+  state.auditLogs.unshift({
+    id: uid("audit"),
+    at: nowISO(),
+    ...entry,
+  });
+  persist();
+}
 
-export function getStockStatusKey(stockQty) {
-  const n = Number(stockQty);
-  if (!Number.isFinite(n) || n <= 0) return STOCK_STATUS.OUT;
-  if (n <= 5) return STOCK_STATUS.LOW;
-  return STOCK_STATUS.OK;
+export function addNotification(n) {
+  const state = db();
+  state.notifications.unshift({
+    id: uid("n"),
+    at: nowISO(),
+    read: false,
+    channel: "inApp",
+    ...n,
+  });
+  persist();
+}
+
+export function addEmail(email) {
+  // simulated email (stored same place, channel=email)
+  const state = db();
+  state.notifications.unshift({
+    id: uid("email"),
+    at: nowISO(),
+    read: false,
+    channel: "email",
+    ...email,
+  });
+  persist();
 }

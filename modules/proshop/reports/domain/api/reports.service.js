@@ -1,13 +1,7 @@
-import { reportsRepo } from "../../../../../shared/api/repositories/reports.repo";
-import { normalizeReport } from "../../domain/reports.logic";
+import reportsMock from "@shared/api/mock/handlers/reports.mock.js";
 
 export const reportsService = {
-  async list(params = {}) {
-    const res = await reportsRepo.list(params);
-
-    return {
-      ...res,
-      items: res.items.map(normalizeReport),
-    };
+  overview(params) {
+    return reportsMock.overview(params);
   },
 };

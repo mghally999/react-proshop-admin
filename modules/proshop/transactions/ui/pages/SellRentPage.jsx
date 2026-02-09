@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "../../../../../shared/ui/primitives/Button";
-import PageHeader from "../../../../../app/layout/PageHeader";
+import Button from "@shared/ui/primitives/Button";
+import PageHeader from "@/app/layout/PageHeader";
 import SellRentDrawer from "../components/SellRentDrawer";
 
 export default function SellRentPage() {

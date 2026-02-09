@@ -1,7 +1,7 @@
-import PageHeader from "../../../../../app/layout/PageHeader";
-import DataTable from "../../../../../shared/ui/data/DataTable/DataTable";
-import Skeleton from "../../../../../shared/ui/composites/Skeleton";
-import EmptyState from "../../../../../shared/ui/composites/EmptyState";
+import PageHeader from "@/app/layout/PageHeader.jsx";
+import DataTable from "@shared/ui/data/DataTable/DataTable";
+import Skeleton from "@shared/ui/composites/Skeleton";
+import EmptyState from "@shared/ui/composites/EmptyState";
 
 import { useAuditLogs } from "../../../../proshop/audit/api/audit.queries";
 

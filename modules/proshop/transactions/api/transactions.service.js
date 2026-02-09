@@ -1,7 +1,15 @@
-import { transactionsRepo } from "../../../../shared/api/repositories";
+import transactionsMock from "@shared/api/mock/handlers/transactions.mock.js";
 
 export const transactionsService = {
-  list: (params) => transactionsRepo.list(params),
-  create: (payload) => transactionsRepo.create(payload),
-  update: (id, payload) => transactionsRepo.update(id, payload),
+  list(params) {
+    return transactionsMock.list(params);
+  },
+  create(payload) {
+    return transactionsMock.create(payload);
+  },
+  markReturned(id) {
+    return transactionsMock.markReturned(id);
+  },
 };
+
+export default transactionsService;

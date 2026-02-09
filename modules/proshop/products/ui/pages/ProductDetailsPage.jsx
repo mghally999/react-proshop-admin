@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styles from "../styles/products.module.css";
 import { useProductQuery } from "../../api/products.queries";
 import { formatMoney } from "../../../../proshop/products/domain/product.logic";
-import { formatDate } from "../../../../../shared/lib/dates";
+import { formatDate } from "../../../../../src/shared/lib/dates";
 
 export default function ProductDetailsPage() {
   const navigate = useNavigate();

@@ -1,14 +1,19 @@
-import PageHeader from "../../../../../app/layout/PageHeader";
-import DataTable from "../../../../../shared/ui/data/DataTable/DataTable";
-import Skeleton from "../../../../../shared/ui/composites/Skeleton";
-import EmptyState from "../../../../../shared/ui/composites/EmptyState";
+// src/modules/proshop/reports/ui/pages/ReportsPage.jsx
 
-import { useReports } from "../../../../proshop/reports/domain/api/reports.queries";
+import PageHeader from "@/app/layout/PageHeader.jsx";
+
+import DataTable from "@shared/ui/data/DataTable/DataTable.jsx";
+import Skeleton from "@shared/ui/composites/Skeleton.jsx";
+import EmptyState from "@shared/ui/composites/EmptyState.jsx";
+
+import { useReports } from "@proshop/reports/domain/api/reports.queries";
 
 export default function ReportsPage() {
   const { data, isLoading } = useReports();
 
-  if (isLoading) return <Skeleton rows={6} />;
+  if (isLoading) {
+    return <Skeleton rows={6} />;
+  }
 
   if (!data?.items?.length) {
     return (
