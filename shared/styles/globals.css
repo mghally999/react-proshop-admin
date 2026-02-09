@@ -1,0 +1,108 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  /* collapse sidebar in next step; for now reduce padding */
+  .app-content {
+    padding: 14px !important;
+  }
+}
+
+/* Remove the default outline (the "blink") */
+a:focus,
+a:focus-visible,
+button:focus,
+button:focus-visible {
+  outline: none;
+}
+
+/* Provide a clean accessible focus ring */
+:focus-visible {
+  box-shadow: 0 0 0 3px rgba(249, 159, 42, 0.25);
+  border-radius: 14px;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Sidebar links: remove first-click flash + active highlight completely --- */
+.sidebarNav a,
+.sidebarNav a:visited,
+.sidebarNav a:hover,
+.sidebarNav a:active {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Kill browser focus outline + active flash for sidebar specifically */
+.sidebarNav a:focus,
+.sidebarNav a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Kill the "mouse-down" flash (active state) */
+.sidebarNav a:active {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Prevent any border flashing from user agent styles */
+.sidebarNav a {
+  border: 0 !important;
+}
+
+/* Optional: make the whole app feel stable */
+* {
+  -webkit-font-smoothing: antialiased;
+}
+/* ===== Toasts (react-hot-toast) ===== */
+.ps-toast {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.ps-toast--success {
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.ps-toast--error {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.ps-toast--loading {
+  border-color: rgba(249, 159, 42, 0.35);
+}

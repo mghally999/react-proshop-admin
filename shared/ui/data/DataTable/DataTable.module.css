@@ -1,0 +1,179 @@
+.card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.tableWrap {
+  width: 100%;
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+}
+
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: color-mix(in oklab, var(--card) 92%, black);
+  border-bottom: 1px solid var(--border);
+}
+
+.th {
+  text-align: left;
+  padding: 12px 12px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.th[data-align="right"] {
+  text-align: right;
+}
+
+.th[data-align="center"] {
+  text-align: center;
+}
+
+.thBtn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: default;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.sortIcon {
+  font-size: 10px;
+  opacity: 0.5;
+  transform: translateY(-1px);
+}
+
+.sortIcon[data-dir="asc"] {
+  opacity: 1;
+}
+
+.sortIcon[data-dir="desc"] {
+  opacity: 1;
+  transform: rotate(180deg) translateY(1px);
+}
+
+.thActions {
+  width: 200px;
+  padding: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.tbody {
+  background: transparent;
+}
+
+.tr {
+  border-top: 1px solid var(--border);
+}
+
+.td {
+  padding: 12px;
+  color: var(--text);
+  font-size: 13px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.td[data-align="right"] {
+  text-align: right;
+}
+
+.td[data-align="center"] {
+  text-align: center;
+}
+
+.tdActions {
+  padding: 10px 12px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.stateCell {
+  padding: 20px;
+}
+
+.loading {
+  color: var(--muted);
+}
+
+.empty {
+  display: grid;
+  gap: 6px;
+}
+
+.emptyTitle {
+  font-weight: 800;
+  color: var(--text);
+}
+
+.emptyHint {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.pagerLeft {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagerRight {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.pageSize {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.select {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 10px;
+  outline: none;
+}
+
+.pagerBtns {
+  display: flex;
+  gap: 8px;
+}
