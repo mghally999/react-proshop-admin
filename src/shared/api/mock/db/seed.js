@@ -1,200 +1,190 @@
 import { nowISO } from "@shared/lib/dates.js";
 
-export function seedAll() {
+export function uid(prefix = "id") {
+  return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now()}`;
+}
+
+export function seedUsers() {
+  return [
+    { id: "u_admin", name: "Admin", email: "admin@proshop.com", role: "admin" },
+    { id: "u1", name: "Omar Ali", email: "omar@email.com", role: "customer" },
+    { id: "u2", name: "Sara Noor", email: "sara@email.com", role: "customer" },
+    {
+      id: "u3",
+      name: "Hassan Kareem",
+      email: "hassan@email.com",
+      role: "customer",
+    },
+  ];
+}
+
+export function seedProducts() {
   const t = nowISO();
 
-  // USERS (for Sell/Rent page)
-  const users = [
-    { id: "u1", name: "Omar Ali", email: "omar@demo.com" },
-    { id: "u2", name: "Sara Khan", email: "sara@demo.com" },
-    { id: "u3", name: "John Smith", email: "john@demo.com" },
-  ];
-
-  // PRODUCTS (US-01 / US-02 / US-03 / FR-01 / FR-04 / FR-06)
-  const products = [
+  return [
     {
       id: "p1",
       name: "Premium Golf Gloves",
       sku: "GLOVE",
       category: "Accessories",
+      description: "Tour-grade grip with breathable fabric.",
       productType: "sale",
       status: "active",
       isAvailable: true,
       priceCents: 7500,
-      costCents: 3500,
-      stock: 0, // using variants stock instead
-      description: "Tour-grade gloves with breathable grip.",
-      variants: [
-        { id: "v1", name: "Size S", sku: "GLOVE-S", priceCents: 7500, stock: 12, isAvailable: true },
-        { id: "v2", name: "Size M", sku: "GLOVE-M", priceCents: 7500, stock: 3, isAvailable: true },  // LOW STOCK demo
-        { id: "v3", name: "Size L", sku: "GLOVE-L", priceCents: 7500, stock: 0, isAvailable: false }, // OUT OF STOCK demo
-      ],
-      rental: null,
+      costCents: 3200,
+      stock: 40,
+      lowStockThreshold: 5,
       updatedAt: t,
+      variants: [
+        {
+          id: "v1",
+          name: "Size S",
+          sku: "GLOVE-S",
+          priceCents: 7500,
+          stock: 10,
+          isAvailable: true,
+        },
+        {
+          id: "v2",
+          name: "Size M",
+          sku: "GLOVE-M",
+          priceCents: 7500,
+          stock: 20,
+          isAvailable: true,
+        },
+        {
+          id: "v3",
+          name: "Size L",
+          sku: "GLOVE-L",
+          priceCents: 7500,
+          stock: 10,
+          isAvailable: true,
+        },
+      ],
     },
     {
       id: "p2",
-      name: "Golf Cart",
-      sku: "CART",
+      name: "Golf Cart (Daily Rental)",
+      sku: "CART-DAY",
       category: "Rental",
+      description: "Electric cart rental. Deposit applies.",
       productType: "rental",
       status: "active",
       isAvailable: true,
       priceCents: 0,
       costCents: 0,
       stock: 3,
-      description: "Electric cart. Rental includes deposit.",
-      variants: [],
+      lowStockThreshold: 1,
       rental: {
         unit: "day",
-        rateCents: 25000,
+        rateCents: 15000,
         flatRateCents: 0,
         depositCents: 50000,
       },
       updatedAt: t,
+      variants: [],
     },
     {
       id: "p3",
-      name: "Pro V1 Balls Pack (12)",
+      name: "Golf Balls Pack (12)",
       sku: "BALLS-12",
       category: "Consumables",
+      description: "Distance + control (12 pack).",
       productType: "sale",
       status: "active",
       isAvailable: true,
       priceCents: 4500,
       costCents: 2000,
-      stock: 4, // LOW STOCK demo
-      description: "Premium balls pack, 12 pcs.",
-      variants: [],
-      rental: null,
+      stock: 120,
+      lowStockThreshold: 10,
       updatedAt: t,
+      variants: [],
     },
     {
       id: "p4",
-      name: "Umbrella (Club Branded)",
-      sku: "UMBR-01",
-      category: "Accessories",
-      productType: "sale",
+      name: "Range Finder (Weekend Rental)",
+      sku: "RANGE-RENT",
+      category: "Rental",
+      description: "Precision range finder. Flat weekend rate + deposit.",
+      productType: "rental",
       status: "active",
-      isAvailable: false,
-      priceCents: 6500,
-      costCents: 2500,
-      stock: 0, // OUT OF STOCK demo
-      description: "Out of stock example.",
-      variants: [],
-      rental: null,
+      isAvailable: true,
+      priceCents: 0,
+      costCents: 0,
+      stock: 8,
+      lowStockThreshold: 2,
+      rental: {
+        unit: "day",
+        rateCents: 0,
+        flatRateCents: 22000,
+        depositCents: 30000,
+      },
       updatedAt: t,
+      variants: [
+        {
+          id: "v41",
+          name: "Standard Kit",
+          sku: "RF-STD",
+          priceCents: 0,
+          stock: 5,
+          isAvailable: true,
+          rental: {
+            unit: "day",
+            rateCents: 0,
+            flatRateCents: 22000,
+            depositCents: 30000,
+          },
+        },
+        {
+          id: "v42",
+          name: "Pro Kit",
+          sku: "RF-PRO",
+          priceCents: 0,
+          stock: 3,
+          isAvailable: true,
+          rental: {
+            unit: "day",
+            rateCents: 0,
+            flatRateCents: 30000,
+            depositCents: 40000,
+          },
+        },
+      ],
     },
   ];
+}
 
-  // TRANSACTIONS + INVOICES (US-04 / US-05 / US-11 / US-12 / US-13)
-  const transactions = [
+export function seedMedia() {
+  // keep urls simple; swap later with your uploader
+  return [
     {
-      id: "tx1",
-      type: "sale",
-      status: "sold",
-      createdAt: t,
+      id: "m1",
+      productId: "p1",
+      url: "https://picsum.photos/seed/glove/900/700",
+      isPrimary: true,
+      order: 1,
+    },
+    {
+      id: "m2",
+      productId: "p2",
+      url: "https://picsum.photos/seed/cart/900/700",
+      isPrimary: true,
+      order: 1,
+    },
+    {
+      id: "m3",
       productId: "p3",
-      variantId: null,
-      productName: "Pro V1 Balls Pack (12)",
-      userId: "u1",
-      userName: "Omar Ali",
-      qty: 2,
-      unitPriceCents: 4500,
-      subtotalCents: 9000,
-      taxCents: 450,
-      totalCents: 9450,
-      overrideTotalCents: null,
+      url: "https://picsum.photos/seed/balls/900/700",
+      isPrimary: true,
+      order: 1,
     },
     {
-      id: "tx2",
-      type: "rent",
-      status: "rented",
-      createdAt: t,
-      productId: "p2",
-      variantId: null,
-      productName: "Golf Cart",
-      userId: "u2",
-      userName: "Sara Khan",
-      qty: 1,
-      duration: 2,
-      unitPriceCents: 25000,
-      subtotalCents: 25000 * 2 + 50000,
-      taxCents: Math.round((25000 * 2 + 50000) * 0.05),
-      totalCents: Math.round((25000 * 2 + 50000) * 1.05),
-      overrideTotalCents: null,
-    },
-    {
-      id: "tx3",
-      type: "rent",
-      status: "returned",
-      createdAt: t,
-      returnedAt: t,
-      productId: "p2",
-      variantId: null,
-      productName: "Golf Cart",
-      userId: "u3",
-      userName: "John Smith",
-      qty: 1,
-      duration: 1,
-      unitPriceCents: 25000,
-      subtotalCents: 25000 + 50000,
-      taxCents: Math.round((25000 + 50000) * 0.05),
-      totalCents: Math.round((25000 + 50000) * 1.05),
-      overrideTotalCents: 70000 * 100, // override demo if you want
+      id: "m4",
+      productId: "p4",
+      url: "https://picsum.photos/seed/range/900/700",
+      isPrimary: true,
+      order: 1,
     },
   ];
-
-  const invoices = [
-    {
-      id: "inv1",
-      transactionId: "tx1",
-      createdAt: t,
-      status: "paid",
-      type: "sale",
-      userId: "u1",
-      productName: "Pro V1 Balls Pack (12)",
-      totalCents: 9450,
-    },
-    {
-      id: "inv2",
-      transactionId: "tx2",
-      createdAt: t,
-      status: "unpaid",
-      type: "rent",
-      userId: "u2",
-      productName: "Golf Cart",
-      totalCents: Math.round((25000 * 2 + 50000) * 1.05),
-    },
-    {
-      id: "inv3",
-      transactionId: "tx3",
-      createdAt: t,
-      status: "paid",
-      type: "rent",
-      userId: "u3",
-      productName: "Golf Cart",
-      totalCents: Math.round((25000 + 50000) * 1.05),
-    },
-  ];
-
-  // AUDIT (US-10 / FR-23)
-  const audit = [
-    { id: "a1", at: t, adminId: "admin-1", action: "seed_demo", entity: "db", entityId: null, userId: null, meta: { note: "Seeded demo lifecycle" } },
-  ];
-
-  // NOTIFICATIONS (US-07 / FR-18)
-  const notifications = [
-    { id: "n1", at: t, to: "admin", userId: null, title: "Demo data seeded", message: "Lifecycle examples are ready.", kind: "success", read: false },
-  ];
-
-  return {
-    users,
-    products,
-    transactions,
-    invoices,
-    audit,
-    notifications,
-    media: {}, // productId -> images
-  };
 }

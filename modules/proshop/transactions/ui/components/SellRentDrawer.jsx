@@ -7,7 +7,7 @@ import Select from "@shared/ui/primitives/Select.jsx";
 import Input from "@shared/ui/primitives/Input.jsx";
 
 import { useCreateTransaction } from "@proshop/transactions/api/transactions.mutations.js";
-import { useProducts } from "@proshop/products/api/products.queries.js";
+import { useProductsQuery } from "@proshop/products/api/products.queries.js";
 import { useUsers } from "@shared/api/users/users.queries.js";
 
 import { formatMoney } from "@proshop/products/domain/product.logic.js";
@@ -45,7 +45,7 @@ export default function SellRentDrawer({ open, onClose }) {
 
   const tx = useCreateTransaction();
 
-  const { data: productsData } = useProducts({
+  const { data: productsData } = useProductsQuery({
     page: 1,
     pageSize: 200,
     search: "",

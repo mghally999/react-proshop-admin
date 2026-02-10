@@ -13,6 +13,7 @@ import SellRentPage from "../transactions/ui/pages/SellRentPage.jsx";
 import SoldItemsPage from "../transactions/ui/pages/SoldItemsPage.jsx";
 import RentedItemsPage from "../transactions/ui/pages/RentedItemsPage.jsx";
 import ReturnedItemsPage from "../transactions/ui/pages/ReturnedItemsPage.jsx";
+import ProductViewPage from "../products/ui/pages/ProductViewPage.jsx";
 
 export default function ProShopRoutes() {
   return (
@@ -23,6 +24,7 @@ export default function ProShopRoutes() {
       <Route path="products/new" element={<ProductCreatePage />} />
       <Route path="products/:id" element={<ProductDetailsPage />} />
       <Route path="products/:id/edit" element={<ProductEditPage />} />
+      <Route path="products/:id/view" element={<ProductViewPage />} />
       <Route path="products/:id/delete" element={<ProductDeletePage />} />
 
       <Route path="transactions" element={<SellRentPage />} />

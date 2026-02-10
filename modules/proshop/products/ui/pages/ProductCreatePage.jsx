@@ -1,28 +1,32 @@
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-import { routesConfig } from "@/app/router/routes.config.jsx";
-import { useCreateProductMutation } from "@proshop/products/api/products.mutations.js";
-import {
-  toProductPayload,
-  toFormDefaults,
-} from "@proshop/products/domain/product.logic.js";
-import { toastError, toastSuccess } from "@shared/ui/feedback/Toast.jsx";
-
-import ProductForm from "@proshop/products/ui/components/ProductForm.jsx";
+import ProductForm from "../components/ProductForm.jsx";
 import styles from "../styles/products.module.css";
+
+import { useCreateProductMutation } from "@proshop/products/api/products.mutations.js";
+import { newProductDefaults } from "../../domain/product.logic.js";
 
 export default function ProductCreatePage() {
   const navigate = useNavigate();
   const createMut = useCreateProductMutation();
 
-  async function handleSubmit(values) {
+  async function onSubmit(payload) {
     try {
-      const payload = toProductPayload(values);
       const created = await createMut.mutateAsync(payload);
-      toastSuccess("Product created");
-      navigate(`/proshop/products/${created.id}`);
+      const id = created?.id ?? created?._id;
+
+      toast.success("Product created");
+
+      if (!id) {
+        toast.error("Create succeeded but API did not return product id");
+        navigate("/proshop/products");
+        return;
+      }
+
+      navigate(`/proshop/products/${id}`);
     } catch (e) {
-      toastError(e?.message ?? "Failed to create product");
+      toast.error(e?.response?.data?.message ?? e.message);
     }
   }
 
@@ -31,13 +35,10 @@ export default function ProductCreatePage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Create product</h1>
-          <p className={styles.subtitle}>
-            Add a new product (mock now, API later).
-          </p>
         </div>
 
         <button
-          className={styles.secondaryButton}
+          className={styles.ghostButton}
           type="button"
           onClick={() => navigate("/proshop/products")}
         >
@@ -47,9 +48,9 @@ export default function ProductCreatePage() {
 
       <ProductForm
         mode="create"
-        initialValues={toFormDefaults(null)}
+        initialValues={newProductDefaults}
         submitting={createMut.isPending}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       />
     </div>
   );

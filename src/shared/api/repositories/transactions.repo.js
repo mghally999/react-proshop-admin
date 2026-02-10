@@ -1,4 +1,4 @@
-import { db, persist } from "../mock/db/store.js";
+import { db, persist } from "@shared/api/mock/db/store.js";
 import { uid } from "@shared/lib/id.js";
 import { nowISO } from "@shared/lib/dates.js";
 

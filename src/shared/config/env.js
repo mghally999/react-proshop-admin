@@ -1,4 +1,3 @@
-export const ENV = {
-  USE_MOCK: true,
-  API_BASE_URL: "", // later
+export const FE_ENV = {
+  API_BASE: import.meta.env.VITE_API_BASE || "/api",
 };

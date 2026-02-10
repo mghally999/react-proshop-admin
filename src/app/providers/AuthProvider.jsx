@@ -1,26 +1,14 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { httpClient } from "@shared/api/http/httpClient.js";
+import { endpoints } from "@shared/api/http/endpoints.js";
 
 const AuthContext = createContext(null);
-
-const STORAGE_KEY = "ps_auth";
-
-function readStoredAuth() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeStoredAuth(value) {
-  try {
-    if (!value) localStorage.removeItem(STORAGE_KEY);
-    else localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-  } catch {
-    // ignore
-  }
-}
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
@@ -29,40 +17,56 @@ export function useAuth() {
 }
 
 export default function AuthProvider({ children }) {
-  const [auth, setAuth] = useState(() => readStoredAuth());
-  const token = auth?.token || null;
-  const user = auth?.user || null;
+  const [user, setUser] = useState(null);
+  const [booting, setBooting] = useState(true);
+
+  async function refreshMe() {
+    try {
+      const res = await httpClient.get(endpoints.auth.me);
+      setUser(res.data.user);
+    } catch {
+      setUser(null);
+    } finally {
+      setBooting(false);
+    }
+  }
 
   useEffect(() => {
-    writeStoredAuth(auth);
-  }, [auth]);
+    refreshMe();
+
+    const on401 = () => {
+      setUser(null);
+    };
+    window.addEventListener("ps:unauthorized", on401);
+    return () => window.removeEventListener("ps:unauthorized", on401);
+  }, []);
 
   const login = async ({ email, password }) => {
-    // ✅ placeholder for API call later
-    // Example: const res = await httpClient(endpoints.auth.login, { method:"POST", body:{email,password} })
-    // setAuth({ token: res.token, user: res.user })
-    if (!email || !password) throw new Error("Email and password are required");
-
-    // mock login
-    setAuth({
-      token: "mock-token",
-      user: { id: "u1", name: "Admin", email }
+    const res = await httpClient.post(endpoints.auth.login, {
+      email,
+      password,
     });
+    setUser(res.data.user);
   };
 
-  const logout = () => {
-    setAuth(null);
+  const logout = async () => {
+    try {
+      await httpClient.post(endpoints.auth.logout);
+    } finally {
+      setUser(null);
+    }
   };
 
   const value = useMemo(
     () => ({
-      isAuthed: !!token,
-      token,
+      booting,
+      isAuthed: !!user,
       user,
       login,
-      logout
+      logout,
+      refreshMe,
     }),
-    [token, user]
+    [booting, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

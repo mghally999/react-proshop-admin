@@ -1,17 +1,6 @@
-import { getAuthToken } from "./interceptors.js";
+import axios from "axios";
 
-export async function httpClient(url, { method = "GET", body, headers } = {}) {
-  const token = getAuthToken();
-
-  const res = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(headers || {})
-    },
-    body: body ? JSON.stringify(body) : undefined
-  });
-
-  // ...same as before
-}
+export const httpClient = axios.create({
+  baseURL: "", // IMPORTANT (use Vite proxy)
+  withCredentials: true, // send/receive session cookie
+});

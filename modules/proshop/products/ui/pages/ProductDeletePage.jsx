@@ -1,42 +1,70 @@
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import styles from "../styles/products.module.css";
+
 import { useProductQuery } from "@proshop/products/api/products.queries.js";
 import { useDeleteProductMutation } from "@proshop/products/api/products.mutations.js";
-import PageHeader from "@/app/layout/PageHeader.jsx";
-import Button from "@shared/ui/primitives/Button.jsx";
 
 export default function ProductDeletePage() {
   const { id } = useParams();
-  const nav = useNavigate();
+  const navigate = useNavigate();
 
-  const { data: product } = useProductQuery(id);
-  const del = useDeleteProductMutation();
+  const { data, isLoading } = useProductQuery(id);
+  const delMut = useDeleteProductMutation();
 
   async function onDelete() {
-    await del.mutateAsync({ id });
-    nav("/proshop/products");
+    try {
+      await delMut.mutateAsync(id);
+      toast.success("Deleted");
+      navigate("/proshop/products");
+    } catch (e) {
+      toast.error(e?.response?.data?.message ?? e.message);
+    }
   }
 
   return (
-    <>
-      <PageHeader title="Delete Product" subtitle="Soft delete (keeps history & reports)." />
-
-      <div style={{ maxWidth: 700, padding: 16 }}>
-        <div style={{ opacity: 0.85, marginBottom: 12 }}>
-          Are you sure you want to delete:
-          <div style={{ fontWeight: 800, marginTop: 6 }}>
-            {product?.name || "Loading…"}
+    <div className={styles.page}>
+      <div className={styles.header}>
+        <div>
+          <h1 className={styles.title}>Delete product</h1>
+          <div className={styles.smallMuted}>
+            {isLoading ? "Loading…" : (data?.name ?? "")}
           </div>
         </div>
 
+        <button
+          className={styles.ghostButton}
+          type="button"
+          onClick={() => navigate(`/proshop/products/${id}`)}
+        >
+          Back
+        </button>
+      </div>
+
+      <div className={styles.card}>
+        <div style={{ marginBottom: 12 }}>
+          This will permanently delete the product from your database.
+        </div>
+
         <div style={{ display: "flex", gap: 10 }}>
-          <Button variant="ghost" onClick={() => nav(`/proshop/products/${id}`)}>
+          <button
+            className={styles.dangerBtn}
+            type="button"
+            onClick={onDelete}
+            disabled={delMut.isPending}
+          >
+            {delMut.isPending ? "Deleting…" : "Confirm delete"}
+          </button>
+
+          <button
+            className={styles.outlineButton}
+            type="button"
+            onClick={() => navigate(`/proshop/products/${id}`)}
+          >
             Cancel
-          </Button>
-          <Button variant="danger" loading={del.isPending} onClick={onDelete}>
-            Delete
-          </Button>
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

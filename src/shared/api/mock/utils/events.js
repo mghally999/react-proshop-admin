@@ -1,6 +1,6 @@
 import { uid } from "@shared/lib/id.js";
 import { nowISO } from "@shared/lib/dates.js";
-import { db, persist } from "../db/store.js";
+import { db, persist } from "@shared/api/mock/db/store.js";
 
 const bus = new EventTarget();
 

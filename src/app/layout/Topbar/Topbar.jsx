@@ -11,7 +11,6 @@ export default function Topbar() {
     <header className={styles.header}>
       <div className={styles.left}>
         <div className={styles.title}>Pro Shop — EPIC Admin</div>
-        <div className={styles.sub}>Inventory • Rentals • Invoices • Reports</div>
       </div>
 
       <div className={styles.right}>

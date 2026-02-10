@@ -1,4 +1,4 @@
-import { db, persist } from "../db/store.js";
+import { db, persist } from "@shared/api/mock/db/store.js";
 import { uid } from "@shared/lib/id.js";
 import { nowISO } from "@shared/lib/dates.js";
 import { addAudit, addNotification } from "../utils/events.js";
@@ -11,11 +11,16 @@ function findProduct(productId) {
 
 function findVariant(product, variantId) {
   if (!product || !variantId) return null;
-  return (product.variants || []).find((v) => String(v.id) === String(variantId)) || null;
+  return (
+    (product.variants || []).find((v) => String(v.id) === String(variantId)) ||
+    null
+  );
 }
 
 function ensureStock(product, variant, qty) {
-  const available = variant ? Number(variant.stock || 0) : Number(product.stock || 0);
+  const available = variant
+    ? Number(variant.stock || 0)
+    : Number(product.stock || 0);
   if (available < qty) throw new Error("Insufficient stock");
 }
 
@@ -61,31 +66,35 @@ export const transactionsMock = {
 
     const variant = findVariant(product, payload.variantId);
     const type = payload.type; // "sale" | "rent"
-    const user = db().users.find((u) => String(u.id) === String(payload.userId));
+    const user = db().users.find(
+      (u) => String(u.id) === String(payload.userId)
+    );
     if (!user) throw new Error("User not found");
 
     // stock rules (US-06 / FR-11–14)
-    if (type === "sale") ensureStock(product, variant, Math.max(1, payload.qty || 1));
+    if (type === "sale")
+      ensureStock(product, variant, Math.max(1, payload.qty || 1));
     if (type === "rent") ensureStock(product, variant, 1);
 
     // pricing (US-11 / FR-08)
     const qty = type === "sale" ? Math.max(1, Number(payload.qty || 1)) : 1;
-    const duration = type === "rent" ? Math.max(1, Number(payload.duration || 1)) : null;
+    const duration =
+      type === "rent" ? Math.max(1, Number(payload.duration || 1)) : null;
 
     const baseUnit = variant ? variant.priceCents : product.priceCents;
     const subtotalCents =
       payload.overrideTotalCents != null
         ? Number(payload.overrideTotalCents)
         : type === "sale"
-        ? baseUnit * qty
-        : (() => {
-            const r = product.rental;
-            if (!r) return 0;
-            const flat = Number(r.flatRateCents || 0);
-            const rate = Number(r.rateCents || 0);
-            const deposit = Number(r.depositCents || 0);
-            return (flat > 0 ? flat : rate * duration) + deposit;
-          })();
+          ? baseUnit * qty
+          : (() => {
+              const r = product.rental;
+              if (!r) return 0;
+              const flat = Number(r.flatRateCents || 0);
+              const rate = Number(r.rateCents || 0);
+              const deposit = Number(r.depositCents || 0);
+              return (flat > 0 ? flat : rate * duration) + deposit;
+            })();
 
     const taxCents = Math.round(subtotalCents * VAT);
     const totalCents = subtotalCents + taxCents;
@@ -128,7 +137,12 @@ export const transactionsMock = {
       entity: "transaction",
       entityId: tx.id,
       userId: user.id,
-      meta: { productId: product.id, variantId: variant?.id || null, invoiceId: inv.id, overrideTotalCents: tx.overrideTotalCents },
+      meta: {
+        productId: product.id,
+        variantId: variant?.id || null,
+        invoiceId: inv.id,
+        overrideTotalCents: tx.overrideTotalCents,
+      },
     });
 
     // notifications (US-07 / FR-18)

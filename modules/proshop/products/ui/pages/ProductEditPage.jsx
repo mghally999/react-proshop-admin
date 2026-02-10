@@ -1,53 +1,44 @@
-import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import ProductForm from "../components/ProductForm.jsx";
+import styles from "../styles/products.module.css";
 
 import { useProductQuery } from "@proshop/products/api/products.queries.js";
 import { useUpdateProductMutation } from "@proshop/products/api/products.mutations.js";
-import {
-  toFormDefaults,
-  toProductPayload,
-} from "@proshop/products/domain/product.logic.js";
-
-import { toastError, toastSuccess } from "@shared/ui/feedback/Toast.jsx";
-
-import ProductForm from "@proshop/products/ui/components/ProductForm.jsx";
-import styles from "../styles/products.module.css";
+import { toFormDefaults } from "../../domain/product.logic.js";
 
 export default function ProductEditPage() {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useProductQuery(id);
   const updateMut = useUpdateProductMutation();
 
-  const defaults = useMemo(() => toFormDefaults(data), [data]);
-
-  async function handleSubmit(values) {
+  async function onSubmit(payload) {
     try {
-      const payload = toProductPayload(values);
-      await updateMut.mutateAsync({ id, payload });
-      toastSuccess("Product updated");
-      navigate(`/proshop/products/${id}`);
+      const updated = await updateMut.mutateAsync({ id, payload });
+      toast.success("Saved");
+      const nextId = updated?.id ?? updated?._id ?? id;
+      navigate(`/proshop/products/${nextId}`);
     } catch (e) {
-      toastError(e?.message ?? "Failed to update product");
+      toast.error(e?.response?.data?.message ?? e.message);
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.card}>Loading…</div>
-      </div>
-    );
-  }
+  if (isLoading) return <div className={styles.page}>Loading…</div>;
 
   if (isError) {
     return (
       <div className={styles.page}>
         <div className={styles.errorBox}>
-          <div className={styles.errorTitle}>Product not found</div>
+          <div className={styles.errorTitle}>Failed to load product</div>
           <div className={styles.errorText}>
-            {String(error?.message ?? "")}
+            {String(
+              error?.response?.data?.message ??
+                error?.message ??
+                "Unknown error"
+            )}
           </div>
         </div>
       </div>
@@ -59,27 +50,22 @@ export default function ProductEditPage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Edit product</h1>
-          <p className={styles.subtitle}>
-            {data.name} · {data.sku}
-          </p>
         </div>
 
-        <div className={styles.headerActions}>
-          <button
-            className={styles.secondaryButton}
-            type="button"
-            onClick={() => navigate(`/proshop/products/${id}`)}
-          >
-            Cancel
-          </button>
-        </div>
+        <button
+          className={styles.ghostButton}
+          type="button"
+          onClick={() => navigate(`/proshop/products/${id}`)}
+        >
+          Back
+        </button>
       </div>
 
       <ProductForm
         mode="edit"
-        initialValues={defaults}
+        initialValues={toFormDefaults(data)}
         submitting={updateMut.isPending}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       />
     </div>
   );

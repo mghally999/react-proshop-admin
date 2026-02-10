@@ -1,4 +1,4 @@
-import { db } from "../db/store.js";
+import { db } from "@shared/api/mock/db/store.js";
 
 export const auditMock = {
   list() {

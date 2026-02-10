@@ -1,102 +1,94 @@
-import { useNavigate, useParams } from "react-router-dom";
-import styles from "../styles/products.module.css";
-import { useProductQuery } from "../../api/products.queries";
-import { formatMoney } from "../../../../proshop/products/domain/product.logic";
-import { formatDate } from "../../../../../src/shared/lib/dates";
+import { useMemo } from "react";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
+import { useProductQuery } from "../../api/products.queries.js";
+import PageHeader from "@/app/layout/PageHeader.jsx";
+import Button from "@shared/ui/primitives/Button.jsx";
+import { formatMoney, getStockStatusKey } from "../../domain/product.logic.js";
 
 export default function ProductDetailsPage() {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const nav = useNavigate();
 
-  const { data: product, isLoading, isError, error } = useProductQuery(id);
+  if (!id || id === "undefined") {
+    return <Navigate to="/proshop/products" replace />;
+  }
+
+  const { data: product, isLoading, error } = useProductQuery(id);
+
+  const stockKey = useMemo(
+    () => getStockStatusKey(product?.stock),
+    [product?.stock]
+  );
 
   if (isLoading) {
     return (
-      <div className={styles.page}>
-        <div className={styles.card}>Loading…</div>
-      </div>
+      <>
+        <PageHeader title="Product" subtitle="Loading…" />
+        <div style={{ padding: 16 }}>Loading…</div>
+      </>
     );
   }
 
-  if (isError || !product) {
+  if (error) {
     return (
-      <div className={styles.page}>
-        <div className={styles.card}>
-          <h2 className={styles.h2}>Product not found</h2>
-          <div className={styles.errorText}>
-            {error?.message || "Product does not exist"}
-          </div>
-          <button
-            className={styles.ghostBtn}
-            onClick={() => navigate("/proshop/products")}
-          >
-            Back
-          </button>
+      <>
+        <PageHeader title="Product not found" subtitle={error.message} />
+        <div style={{ padding: 16 }}>
+          <Button onClick={() => nav("/proshop/products")}>Back</Button>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.actionsRow}>
-          <button
-            className={styles.ghostBtn}
-            onClick={() => navigate("/proshop/products")}
-          >
-            Back
-          </button>
-          <button
-            className={styles.primaryBtn}
-            onClick={() => navigate(`/proshop/products/${id}/edit`)}
-          >
-            Edit
-          </button>
-        </div>
+    <>
+      <PageHeader
+        title={product?.name ?? "Product"}
+        subtitle={`SKU: ${product?.sku ?? "—"} • Stock: ${stockKey}`}
+        actions={
+          <div style={{ display: "flex", gap: 10 }}>
+            <Button onClick={() => nav(`/proshop/products/${id}/edit`)}>
+              Edit
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => nav(`/proshop/products/${id}/delete`)}
+            >
+              Delete
+            </Button>
+          </div>
+        }
+      />
 
-        <h2 className={styles.h2}>{product.name}</h2>
-
-        <div className={styles.grid2}>
-          <div className={styles.kv}>
-            <div className={styles.k}>SKU</div>
-            <div className={styles.v}>{product.sku || "-"}</div>
+      <div style={{ maxWidth: 900, padding: 16 }}>
+        <div
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}
+        >
+          <div>
+            <b>Category:</b> {product.category}
           </div>
-          <div className={styles.kv}>
-            <div className={styles.k}>Category</div>
-            <div className={styles.v}>{product.category || "-"}</div>
+          <div>
+            <b>Status:</b> {product.status}
           </div>
-          <div className={styles.kv}>
-            <div className={styles.k}>Price</div>
-            <div className={styles.v}>
-              {formatMoney(product.priceCents || product.price || 0)}
-            </div>
+          <div>
+            <b>Type:</b> {product.productType}
           </div>
-          <div className={styles.kv}>
-            <div className={styles.k}>Stock</div>
-            <div className={styles.v}>
-              {product.stock || product.stockQty || 0}
-            </div>
+          <div>
+            <b>Available:</b> {product.isAvailable ? "Yes" : "No"}
           </div>
-          <div className={styles.kv}>
-            <div className={styles.k}>Status</div>
-            <div className={styles.v}>{product.status || "draft"}</div>
+          <div>
+            <b>Price:</b> {formatMoney(product.priceCents, "AED")}
           </div>
-          <div className={styles.kv}>
-            <div className={styles.k}>Updated</div>
-            <div className={styles.v}>
-              {product.updatedAt ? formatDate(product.updatedAt) : "-"}
-            </div>
+          <div>
+            <b>Cost:</b> {formatMoney(product.costCents, "AED")}
           </div>
         </div>
 
-        <div className={styles.section}>
-          <div className={styles.sectionTitle}>Description</div>
-          <div className={styles.sectionContent}>
-            {product.description || "—"}
-          </div>
+        <div style={{ marginTop: 14 }}>
+          <b>Description</b>
+          <div style={{ opacity: 0.9 }}>{product.description || "—"}</div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

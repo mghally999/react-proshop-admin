@@ -21,15 +21,22 @@ import InvoiceDetailsPage from "@modules/proshop/invoices/ui/pages/InvoiceDetail
 import ReportsPage from "@modules/proshop/reports/ui/pages/ReportsPage.jsx";
 import AuditLogsPage from "@modules/proshop/audit/ui/pages/AuditLogsPage.jsx";
 import LoginPage from "@modules/auth/ui/pages/LoginPage.jsx";
+import RequireAuth from "./RequireAuth.jsx";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-              {/* PUBLIC */}
-      <Route path="/login" element={<LoginPage />} />
+        {/* PUBLIC */}
+        <Route path="/login" element={<LoginPage />} />
 
-        <Route element={<DashboardLayout />}>
+        <Route
+          element={
+            <RequireAuth>
+              <DashboardLayout />
+            </RequireAuth>
+          }
+        >
           {/* ROOT */}
           <Route
             path="/"

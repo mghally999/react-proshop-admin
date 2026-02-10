@@ -1,17 +1,23 @@
 // src/shared/api/mock/handlers/products.mock.js
 
-import { db, persist } from "../db/store.js";
-import { uid } from "@shared/lib/id.js"; // ✅ FIXED
+import { db, persist } from "@shared/api/mock/db/store.js";
+import { uid } from "@shared/lib/id.js"; //
 import { nowISO } from "@shared/lib/dates.js";
-import { addAudit } from "../utils/events.js";
+import { addAudit } from "@shared/api/mock/utils/events";
 
 function matches(p, q) {
   if (!q) return true;
   const s = q.toLowerCase();
   return (
-    String(p.name || "").toLowerCase().includes(s) ||
-    String(p.sku || "").toLowerCase().includes(s) ||
-    String(p.category || "").toLowerCase().includes(s)
+    String(p.name || "")
+      .toLowerCase()
+      .includes(s) ||
+    String(p.sku || "")
+      .toLowerCase()
+      .includes(s) ||
+    String(p.category || "")
+      .toLowerCase()
+      .includes(s)
   );
 }
 
@@ -28,7 +34,8 @@ function sortItems(items, sort = "updatedAt:desc") {
     const bd = Date.parse(bv);
     if (!Number.isNaN(ad) && !Number.isNaN(bd)) return (ad - bd) * sign;
 
-    if (typeof av === "number" && typeof bv === "number") return (av - bv) * sign;
+    if (typeof av === "number" && typeof bv === "number")
+      return (av - bv) * sign;
     return String(av ?? "").localeCompare(String(bv ?? "")) * sign;
   });
 }

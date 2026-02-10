@@ -12,7 +12,10 @@ export default function LoginPage() {
   const location = useLocation();
   const { login } = useAuth();
 
-  const from = useMemo(() => location.state?.from || "/proshop", [location.state]);
+  const from = useMemo(
+    () => location.state?.from || "/proshop/products",
+    [location.state]
+  );
 
   const [email, setEmail] = useState("admin@proshop.com");
   const [password, setPassword] = useState("123456");
@@ -50,7 +53,11 @@ export default function LoginPage() {
         <form className={styles.form} onSubmit={onSubmit}>
           <div className={styles.field}>
             <div className={styles.label}>Email</div>
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" />
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@company.com"
+            />
           </div>
 
           <div className={styles.field}>
@@ -71,7 +78,8 @@ export default function LoginPage() {
         </form>
 
         <div className={styles.hint}>
-          API placeholder: connect this form to <code>/shared/api/http/endpoints.js</code> later.
+          API placeholder: connect this form to{" "}
+          <code>/shared/api/http/endpoints.js</code> later.
         </div>
       </div>
     </div>
