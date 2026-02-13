@@ -14,7 +14,7 @@ export default function ProductDeletePage() {
 
   async function onDelete() {
     try {
-      await delMut.mutateAsync(id);
+      await delMut.mutateAsync({ id });
       toast.success("Deleted");
       navigate("/proshop/products");
     } catch (e) {

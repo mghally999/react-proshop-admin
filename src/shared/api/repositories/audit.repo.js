@@ -1,25 +1,9 @@
-import { db } from "../mock/db/store";
-import { withLatency } from "../mock/utils/latency";
+import { httpClient } from "../http/httpClient.js";
+import { endpoints } from "../http/endpoints.js";
 
 export const auditRepo = {
-  list: withLatency(() => {
-    const { auditLogs } = db();
-    return {
-      items: [...auditLogs],
-      total: auditLogs.length,
-    };
-  }),
-
-  log: withLatency((entry) => {
-    const state = db();
-
-    state.auditLogs.unshift({
-      id: crypto.randomUUID(),
-      createdAt: Date.now(),
-      user: "Admin",
-      ...entry,
-    });
-
-    return { success: true };
-  }),
+  async list(params) {
+    const res = await httpClient.get(endpoints.audit.list, { params });
+    return res.data;
+  },
 };

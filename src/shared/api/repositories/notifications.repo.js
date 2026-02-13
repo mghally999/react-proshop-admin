@@ -1,31 +1,13 @@
-import { db } from "../mock/db/store";
-import { withLatency } from "../mock/utils/latency";
+import { httpClient } from "../http/httpClient.js";
+import { endpoints } from "../http/endpoints.js";
 
 export const notificationsRepo = {
-  list: withLatency(() => {
-    const { notifications } = db();
-    return {
-      items: [...notifications],
-      total: notifications.length,
-    };
-  }),
-
-  push: withLatency((notification) => {
-    const state = db();
-
-    state.notifications.unshift({
-      id: crypto.randomUUID(),
-      createdAt: Date.now(),
-      read: false,
-      ...notification,
-    });
-
-    return { success: true };
-  }),
-
-  markAllRead: withLatency(() => {
-    const { notifications } = db();
-    notifications.forEach((n) => (n.read = true));
-    return { success: true };
-  }),
+  async list(params) {
+    const res = await httpClient.get(endpoints.notifications.list, { params });
+    return res.data;
+  },
+  async markRead(id) {
+    const res = await httpClient.post(endpoints.notifications.markRead(id));
+    return res.data;
+  },
 };

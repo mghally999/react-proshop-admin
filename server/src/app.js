@@ -8,6 +8,13 @@ import MongoStore from "connect-mongo";
 import { env } from "./config/env.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import productsRoutes from "./modules/products/products.routes.js";
+import usersRoutes from "./modules/users/users.routes.js";
+import transactionsRoutes from "./modules/transactions/transactions.routes.js";
+import invoicesRoutes from "./modules/invoices/invoices.routes.js";
+import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
+import auditRoutes from "./modules/audit/audit.routes.js";
+import notificationsRoutes from "./modules/notifications/notifications.routes.js";
+import reportsRoutes from "./modules/reports/reports.routes.js";
 import { notFound, errorHandler } from "./middlewares/error.js";
 
 export function createApp() {
@@ -51,6 +58,13 @@ export function createApp() {
 
   app.use("/api/auth", authRoutes);
   app.use("/api/products", productsRoutes);
+  app.use("/api/users", usersRoutes);
+  app.use("/api/transactions", transactionsRoutes);
+  app.use("/api/invoices", invoicesRoutes);
+  app.use("/api/dashboard", dashboardRoutes);
+  app.use("/api/audit", auditRoutes);
+  app.use("/api/notifications", notificationsRoutes);
+  app.use("/api/reports", reportsRoutes);
 
   app.use(notFound);
   app.use(errorHandler);

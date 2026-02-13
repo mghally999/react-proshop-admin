@@ -10,7 +10,7 @@ import { formatMoney } from "@modules/proshop/products/domain/product.logic.js";
 import { formatDate } from "@shared/lib/dates.js";
 
 export default function RentedItemsPage() {
-  const { data, isLoading } = useTransactions({ type: "rent", status: "rented" });
+  const { data, isLoading } = useTransactions({ type: "rental", status: "rented", limit: 50 });
   const ret = useReturnRental();
 
   return (
@@ -25,7 +25,7 @@ export default function RentedItemsPage() {
         rows={data?.items || []}
         page={1}
         pageSize={50}
-        total={data?.total || 0}
+        total={data?.meta?.total || 0}
         onPageChange={() => {}}
         onPageSizeChange={() => {}}
         columns={[

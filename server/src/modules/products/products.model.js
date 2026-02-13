@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const VariantSchema = new mongoose.Schema(
   {
-    id: { type: String }, // optional UI id
+    id: { type: String },
     name: { type: String, required: true, trim: true },
     sku: { type: String, required: true, trim: true },
     priceCents: { type: Number, default: 0 },
@@ -18,33 +18,45 @@ const ProductSchema = new mongoose.Schema(
     sku: { type: String, required: true, trim: true, unique: true },
     category: { type: String, required: true, trim: true },
 
-    productType: { type: String, enum: ["sale", "rental"], default: "sale" },
-    status: {
+    productType: {
       type: String,
-      enum: ["draft", "active", "rented", "returned", "archived"],
-      default: "draft",
+      enum: ["sale", "rental"],
+      default: "sale",
     },
+
+   status: {
+  type: String,
+  enum: ["draft", "active", "rented", "returned", "archived"],
+  default: "draft",
+},
+
     isAvailable: { type: Boolean, default: true },
 
     priceCents: { type: Number, default: 0 },
     costCents: { type: Number, default: 0 },
     stock: { type: Number, default: 0 },
 
-    description: { type: String, default: "" },
-    variants: { type: [VariantSchema], default: [] },
-
-    // soft delete
-    isDeleted: { type: Boolean, default: false },
-    deletedAt: { type: Date, default: null },
-
-    // optional audit
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
+    rental: {
+      unit: { type: String, enum: ["hour", "day"], default: "day" },
+      rateCents: { type: Number, default: 0 },
+      depositCents: { type: Number, default: 0 },
     },
 
-    // external seeding (FakeStore)
+    description: { type: String, default: "" },
+    imageUrl: { type: String, default: "" },
+
+    media: [
+      {
+        url: { type: String, required: true },
+        primary: { type: Boolean, default: false },
+        sortOrder: { type: Number, default: 0 },
+      },
+    ],
+
+    variants: { type: [VariantSchema], default: [] },
+
+    isDeleted: { type: Boolean, default: false },
+
     external: {
       provider: { type: String, default: null },
       externalId: { type: Number, default: null },
@@ -56,8 +68,7 @@ const ProductSchema = new mongoose.Schema(
 ProductSchema.index({ name: "text", sku: "text", category: "text" });
 
 ProductSchema.set("toJSON", {
-  virtuals: true,
-  transform: (_doc, ret) => {
+  transform: (_, ret) => {
     ret.id = String(ret._id);
     delete ret._id;
     delete ret.__v;

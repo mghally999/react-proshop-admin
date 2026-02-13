@@ -1,7 +1,10 @@
-import reportsMock from "@shared/api/mock/handlers/reports.mock.js";
+import { httpClient } from "@shared/api/http/httpClient.js";
 
 export const reportsService = {
-  overview(params) {
-    return reportsMock.overview(params);
+  async overview({ days = 7 } = {}) {
+    const { data } = await httpClient.get("/api/reports/overview", {
+      params: { days },
+    });
+    return data;
   },
 };

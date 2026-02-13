@@ -6,7 +6,7 @@ import { formatMoney } from "@proshop/products/domain/product.logic.js";
 import { formatDate } from "@shared/lib/dates.js";
 
 export default function SoldItemsPage() {
-  const { data, isLoading } = useTransactions({ type: "sale", status: "sold" });
+  const { data, isLoading } = useTransactions({ type: "sale", status: "sold", limit: 50 });
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function SoldItemsPage() {
         rows={data?.items || []}
         page={1}
         pageSize={50}
-        total={data?.total || 0}
+        total={data?.meta?.total || 0}
         onPageChange={() => {}}
         onPageSizeChange={() => {}}
         columns={[

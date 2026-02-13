@@ -9,8 +9,9 @@ import { formatMoney } from "@modules/proshop/products/domain/product.logic.js";
 
 export default function ReturnedItemsPage() {
   const { data, isLoading } = useTransactions({
-    type: "rent",
+    type: "rental",
     status: "returned",
+    limit: 50,
   });
 
   return (
@@ -22,7 +23,7 @@ export default function ReturnedItemsPage() {
         rows={data?.items || []}
         page={1}
         pageSize={50}
-        total={data?.total || 0}
+        total={data?.meta?.total || 0}
         onPageChange={() => {}}
         onPageSizeChange={() => {}}
         columns={[

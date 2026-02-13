@@ -14,10 +14,21 @@ export default defineConfig({
     },
   },
   server: {
+    port: 5173,
     proxy: {
+      // ✅ ALL API calls go to backend :4000
       "/api": {
         target: "http://localhost:4000",
         changeOrigin: true,
+        secure: false,
+      },
+
+      // ✅ if you use socket.io
+      "/socket.io": {
+        target: "http://localhost:4000",
+        ws: true,
+        changeOrigin: true,
+        secure: false,
       },
     },
   },

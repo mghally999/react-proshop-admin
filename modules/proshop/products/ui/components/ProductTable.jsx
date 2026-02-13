@@ -3,6 +3,8 @@ import { formatMoney } from "@modules/proshop/products/domain/product.logic.js";
 import { formatDate } from "@shared/lib/dates.js";
 import styles from "../styles/products.module.css";
 
+/* ------------------ Sorting Helpers ------------------ */
+
 function nextSort(current, field) {
   const [curField, curDir] = String(current || "").split(":");
   if (curField !== field) return `${field}:asc`;
@@ -15,17 +17,17 @@ function sortIcon(sort, field) {
   return curDir === "asc" ? "↑" : "↓";
 }
 
+/* ------------------ Component ------------------ */
+
 export default function ProductTable({
-  items,
-  loading,
-  page,
-  pages,
-  total,
-  pageSize,
+  items = [],
+  loading = false,
+  page = 1,
+  pages = 1,
+  total = 0,
+  pageSize = 10,
   onPageChange,
   onPageSizeChange,
-
-  // NEW (optional): supports click-sort + your filters select
   sort,
   onSortChange,
 }) {
@@ -42,9 +44,11 @@ export default function ProductTable({
                   type="button"
                   className={styles.sortBtn}
                   onClick={() => onSortChange?.(nextSort(sort, "name"))}
-                  title="Sort by name"
                 >
-                  Product <span className={styles.sortIcon}>{sortIcon(sort, "name")}</span>
+                  Product{" "}
+                  <span className={styles.sortIcon}>
+                    {sortIcon(sort, "name")}
+                  </span>
                 </button>
               </th>
 
@@ -54,10 +58,12 @@ export default function ProductTable({
                 <button
                   type="button"
                   className={styles.sortBtn}
-                  onClick={() => onSortChange?.(nextSort(sort, "price"))}
-                  title="Sort by price"
+                  onClick={() => onSortChange?.(nextSort(sort, "priceCents"))}
                 >
-                  Price <span className={styles.sortIcon}>{sortIcon(sort, "price")}</span>
+                  Price{" "}
+                  <span className={styles.sortIcon}>
+                    {sortIcon(sort, "priceCents")}
+                  </span>
                 </button>
               </th>
 
@@ -66,9 +72,11 @@ export default function ProductTable({
                   type="button"
                   className={styles.sortBtn}
                   onClick={() => onSortChange?.(nextSort(sort, "stock"))}
-                  title="Sort by stock"
                 >
-                  Stock <span className={styles.sortIcon}>{sortIcon(sort, "stock")}</span>
+                  Stock{" "}
+                  <span className={styles.sortIcon}>
+                    {sortIcon(sort, "stock")}
+                  </span>
                 </button>
               </th>
 
@@ -79,9 +87,11 @@ export default function ProductTable({
                   type="button"
                   className={styles.sortBtn}
                   onClick={() => onSortChange?.(nextSort(sort, "updatedAt"))}
-                  title="Sort by updated"
                 >
-                  Updated <span className={styles.sortIcon}>{sortIcon(sort, "updatedAt")}</span>
+                  Updated{" "}
+                  <span className={styles.sortIcon}>
+                    {sortIcon(sort, "updatedAt")}
+                  </span>
                 </button>
               </th>
 
@@ -92,66 +102,95 @@ export default function ProductTable({
           <tbody>
             {loading ? (
               <tr>
-                <td className={styles.td} colSpan={7}>Loading…</td>
+                <td className={styles.td} colSpan={7}>
+                  Loading…
+                </td>
               </tr>
             ) : items.length === 0 ? (
               <tr>
-                <td className={styles.td} colSpan={7}>No products</td>
+                <td className={styles.td} colSpan={7}>
+                  No products
+                </td>
               </tr>
             ) : (
-              items.map((p) => (
-                <tr key={p.id} className={styles.tr}>
-                  <td className={styles.tdLeft}>
-                    <div className={styles.cellTitle}>{p.name}</div>
-                    <div className={styles.cellSub}>SKU: {p.sku}</div>
-                  </td>
+              items.map((p) => {
+                // ✅ Critical Fix: Support Mongo `_id`
+                const productId = p._id ?? p.id;
 
-                  <td className={styles.td}>{p.category}</td>
+                return (
+                  <tr key={String(productId)} className={styles.tr}>
+                    <td className={styles.tdLeft}>
+                      <div className={styles.cellTitle}>{p.name}</div>
+                      <div className={styles.cellSub}>
+                        SKU: {p.sku || "—"}
+                      </div>
+                    </td>
 
-                  <td className={styles.td}>{formatMoney(p.priceCents)}</td>
+                    <td className={styles.td}>
+                      {p.category || "—"}
+                    </td>
 
-                  <td className={styles.td}>{p.stock}</td>
+                    <td className={styles.td}>
+                      {formatMoney(p.priceCents || 0)}
+                    </td>
 
-                  <td className={styles.td}>
-                    <span className={styles.statusPill}>
-                      <span className={styles.statusDot} />
-                      {p.status}
-                    </span>
-                  </td>
+                    <td className={styles.td}>
+                      {Number(p.stock ?? 0)}
+                    </td>
 
-                  <td className={styles.td}>{formatDate(p.updatedAt)}</td>
+                    <td className={styles.td}>
+                      <span className={styles.statusPill}>
+                        <span className={styles.statusDot} />
+                        {p.status || "draft"}
+                      </span>
+                    </td>
 
-                  <td className={styles.tdRight}>
-                    <button
-                      type="button"
-                      className={styles.ghostButton}
-                      onClick={() => navigate(`/proshop/products/${p.id}`)}
-                    >
-                      View
-                    </button>
+                    <td className={styles.td}>
+                      {p.updatedAt
+                        ? formatDate(p.updatedAt)
+                        : "—"}
+                    </td>
 
-                    <button
-                      type="button"
-                      className={styles.outlineButton}
-                      onClick={() => navigate(`/proshop/products/${p.id}/edit`)}
-                    >
-                      Edit
-                    </button>
+                    <td className={styles.tdRight}>
+                      <button
+                        type="button"
+                        className={styles.ghostButton}
+                        onClick={() =>
+                          navigate(`/proshop/products/${productId}`)
+                        }
+                      >
+                        View
+                      </button>
 
-                    <button
-                      type="button"
-                      className={styles.dangerBtn}
-                      onClick={() => navigate(`/proshop/products/${p.id}/delete`)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
+                      <button
+                        type="button"
+                        className={styles.outlineButton}
+                        onClick={() =>
+                          navigate(`/proshop/products/${productId}/edit`)
+                        }
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        className={styles.dangerBtn}
+                        onClick={() =>
+                          navigate(`/proshop/products/${productId}/delete`)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
+
+      {/* ------------------ Footer ------------------ */}
 
       <div className={styles.tableFooter}>
         <div className={styles.footerLeft}>
@@ -164,7 +203,9 @@ export default function ProductTable({
             <select
               className={styles.selectSmall}
               value={pageSize}
-              onChange={(e) => onPageSizeChange(Number(e.target.value))}
+              onChange={(e) =>
+                onPageSizeChange?.(Number(e.target.value))
+              }
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -176,7 +217,7 @@ export default function ProductTable({
             type="button"
             className={styles.ghostButton}
             disabled={page <= 1}
-            onClick={() => onPageChange(page - 1)}
+            onClick={() => onPageChange?.(page - 1)}
           >
             Prev
           </button>
@@ -185,7 +226,7 @@ export default function ProductTable({
             type="button"
             className={styles.ghostButton}
             disabled={page >= pages}
-            onClick={() => onPageChange(page + 1)}
+            onClick={() => onPageChange?.(page + 1)}
           >
             Next
           </button>

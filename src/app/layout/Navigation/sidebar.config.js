@@ -6,6 +6,8 @@ export const sidebarItems = [
   { label: "Rented Items", path: "/proshop/items/rented" },
   { label: "Returned Items", path: "/proshop/items/returned" },
   { label: "Invoices", path: "/proshop/invoices" },
+  { label: "Notifications", path: "/proshop/notifications" },
   { label: "Reports", path: "/proshop/reports" },
   { label: "Audit Logs", path: "/proshop/audit" },
+  { label: "Users", path: "/proshop/users" }, // ✅ add this
 ];

@@ -1,0 +1,82 @@
+{
+  "hash": "572fdda5",
+  "configHash": "0df8fd30",
+  "lockfileHash": "7e24876b",
+  "browserHash": "c6355bcf",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "a8276ee2",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "eca9d00b",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "0caf4bdb",
+      "needsInterop": false
+    },
+    "socket.io-client": {
+      "src": "../../node_modules/socket.io-client/build/esm/index.js",
+      "file": "socket__io-client.js",
+      "fileHash": "eb50e0f8",
+      "needsInterop": false
+    },
+    "@tanstack/react-query": {
+      "src": "../../node_modules/@tanstack/react-query/build/modern/index.js",
+      "file": "@tanstack_react-query.js",
+      "fileHash": "b8e3ee53",
+      "needsInterop": false
+    },
+    "@tanstack/react-query-devtools": {
+      "src": "../../node_modules/@tanstack/react-query-devtools/build/modern/index.js",
+      "file": "@tanstack_react-query-devtools.js",
+      "fileHash": "7d4d607b",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "ebcf2d97",
+      "needsInterop": false
+    },
+    "recharts": {
+      "src": "../../node_modules/recharts/es6/index.js",
+      "file": "recharts.js",
+      "fileHash": "d07e85ee",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "B5PP2USH-P2LEMIFX": {
+      "file": "B5PP2USH-P2LEMIFX.js"
+    },
+    "WI32IQVE-4ASO6NHV": {
+      "file": "WI32IQVE-4ASO6NHV.js"
+    },
+    "chunk-GMST54JF": {
+      "file": "chunk-GMST54JF.js"
+    },
+    "chunk-PJNMLUTX": {
+      "file": "chunk-PJNMLUTX.js"
+    },
+    "chunk-WLP4NMAQ": {
+      "file": "chunk-WLP4NMAQ.js"
+    },
+    "chunk-PV7ZWGTI": {
+      "file": "chunk-PV7ZWGTI.js"
+    },
+    "chunk-2CLD7BNN": {
+      "file": "chunk-2CLD7BNN.js"
+    },
+    "chunk-WOOG5QLI": {
+      "file": "chunk-WOOG5QLI.js"
+    }
+  }
+}

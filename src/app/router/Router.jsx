@@ -1,8 +1,13 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import DashboardLayout from "../layout/DashboardLayout.jsx";
+import DashboardHome from "../layout/DashboardHome.jsx";
+
 import NotFound from "../error/NotFound.jsx";
 import Forbidden from "../error/Forbidden.jsx";
+
+import LoginPage from "@modules/auth/ui/pages/LoginPage.jsx";
+import RequireAuth from "./RequireAuth.jsx";
 
 // PRODUCTS
 import ProductListPage from "@modules/proshop/products/ui/pages/ProductListPage.jsx";
@@ -17,11 +22,15 @@ import RentedItemsPage from "@modules/proshop/transactions/ui/pages/RentedItemsP
 import ReturnedItemsPage from "@modules/proshop/transactions/ui/pages/ReturnedItemsPage.jsx";
 
 // OTHER
+import InvoiceListPage from "@modules/proshop/invoices/ui/pages/InvoiceListPage.jsx";
 import InvoiceDetailsPage from "@modules/proshop/invoices/ui/pages/InvoiceDetailsPage.jsx";
+import InvoicePrintPage from "@modules/proshop/invoices/ui/pages/InvoicePrintPage.jsx";
 import ReportsPage from "@modules/proshop/reports/ui/pages/ReportsPage.jsx";
 import AuditLogsPage from "@modules/proshop/audit/ui/pages/AuditLogsPage.jsx";
-import LoginPage from "@modules/auth/ui/pages/LoginPage.jsx";
-import RequireAuth from "./RequireAuth.jsx";
+import NotificationsPage from "@modules/proshop/notifications/ui/pages/NotificationsPage.jsx";
+
+// USERS (✅ make sure file name matches exactly)
+import UsersPage from "@modules/proshop/users/ui/pages/UsersPage.jsx";
 
 export default function AppRouter() {
   return (
@@ -30,6 +39,7 @@ export default function AppRouter() {
         {/* PUBLIC */}
         <Route path="/login" element={<LoginPage />} />
 
+        {/* PRIVATE */}
         <Route
           element={
             <RequireAuth>
@@ -37,35 +47,29 @@ export default function AppRouter() {
             </RequireAuth>
           }
         >
-          {/* ROOT */}
-          <Route
-            path="/"
-            element={<Navigate to="/proshop/products" replace />}
-          />
+          {/* HOME */}
+          <Route path="/" element={<DashboardHome />} />
 
-          {/* PRODUCTS */}
+          {/* PROSHOP */}
           <Route path="/proshop/products" element={<ProductListPage />} />
           <Route path="/proshop/products/new" element={<ProductCreatePage />} />
-          <Route
-            path="/proshop/products/:id"
-            element={<ProductDetailsPage />}
-          />
-          <Route
-            path="/proshop/products/:id/edit"
-            element={<ProductEditPage />}
-          />
+          <Route path="/proshop/products/:id" element={<ProductDetailsPage />} />
+          <Route path="/proshop/products/:id/edit" element={<ProductEditPage />} />
+
+          {/* ✅ USERS route must be /proshop/users */}
+          <Route path="/proshop/users" element={<UsersPage />} />
 
           {/* TRANSACTIONS */}
           <Route path="/proshop/transactions" element={<SellRentPage />} />
           <Route path="/proshop/items/sold" element={<SoldItemsPage />} />
           <Route path="/proshop/items/rented" element={<RentedItemsPage />} />
-          <Route
-            path="/proshop/items/returned"
-            element={<ReturnedItemsPage />}
-          />
+          <Route path="/proshop/items/returned" element={<ReturnedItemsPage />} />
 
           {/* OTHER */}
-          <Route path="/proshop/invoices" element={<InvoiceDetailsPage />} />
+          <Route path="/proshop/invoices" element={<InvoiceListPage />} />
+          <Route path="/proshop/invoices/:id" element={<InvoiceDetailsPage />} />
+          <Route path="/proshop/invoices/:id/print" element={<InvoicePrintPage />} />
+          <Route path="/proshop/notifications" element={<NotificationsPage />} />
           <Route path="/proshop/reports" element={<ReportsPage />} />
           <Route path="/proshop/audit" element={<AuditLogsPage />} />
 

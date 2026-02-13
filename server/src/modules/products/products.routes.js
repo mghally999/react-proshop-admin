@@ -1,21 +1,25 @@
-// server/routes/products.routes.js
 import express from "express";
-import {
-  listProducts,
-  getProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  importFakeStore,
-} from "./products.controller";
+import * as controller from "./products.controller.js";
+import { requireAuth } from "../../middlewares/requireAuth.js";
 
 const router = express.Router();
 
-router.get("/", listProducts);
-router.post("/import-fakestore", importFakeStore);
-router.post("/", createProduct);
-router.get("/:id", getProduct);
-router.put("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+// LIST
+router.get("/", controller.listProducts);
+
+// GET ONE
+router.get("/:id", controller.getProduct);
+
+// CREATE
+router.post("/", controller.createProduct);
+
+// UPDATE
+router.put("/:id", controller.updateProduct);
+
+// DELETE (hard)
+router.delete("/:id", controller.deleteProduct);
+
+// IMPORT FAKESTORE
+router.post("/import-fakestore", controller.importFakeStoreProducts);
 
 export default router;
